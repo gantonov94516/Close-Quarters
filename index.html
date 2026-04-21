@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Close Quarters — A Collection</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0c0a08;
+    --bg-2: #13100c;
+    --ink: #f3ece0;
+    --ink-dim: #9a9287;
+    --ink-faint: #4a443c;
+    --accent: #e8a84f;
+    --accent-2: #d15a3a;
+    --accent-3: #8ea87a;
+    --display: "Instrument Serif", Georgia, serif;
+    --serif: "Fraunces", Georgia, serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-weight: 400;
+    line-height: 1.5;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  .tape-bar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg);
+    border-bottom: 1px solid var(--ink-faint);
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+
+  .tape-bar .dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    margin-right: 8px;
+    animation: blink 1.6s infinite;
+    vertical-align: middle;
+  }
+  @keyframes blink {
+    0%, 60% { opacity: 1; }
+    70%, 100% { opacity: 0.25; }
+  }
+
+  .hero {
+    padding: 120px 32px 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--ink-faint);
+    max-width: 180px;
+  }
+
+  .hero-title {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(72px, 13vw, 200px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+  }
+
+  .hero-title .em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--ink-faint);
+  }
+
+  .hero-meta .cell { display: flex; flex-direction: column; gap: 6px; }
+
+  .hero-meta .cell .k {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+
+  .hero-meta .cell .v {
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .hero-meta .cell .sub {
+    color: var(--ink-dim);
+    font-size: 13px;
+    display: block;
+    margin-top: 2px;
+  }
+
+  .hero-intro {
+    max-width: 720px;
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--ink-dim);
+    margin-top: 48px;
+  }
+  .hero-intro em {
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  .tracks {
+    padding: 80px 32px 120px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .tracks-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--ink-faint);
+    margin-bottom: 80px;
+  }
+
+  .tracks-head h2 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: 38px;
+    letter-spacing: -0.01em;
+  }
+
+  .tracks-head .count {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+  }
+
+  .track {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 48px;
+    padding: 48px 0;
+    border-bottom: 1px solid var(--ink-faint);
+    position: relative;
+    align-items: center;
+  }
+
+  .track:nth-child(even) .track-media { order: 2; }
+  .track:nth-child(even) .track-body { order: 1; }
+
+  .track-media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 2px;
+    overflow: hidden;
+    background: var(--bg-2);
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.6), 0 0 0 1px var(--ink-faint);
+    transition: transform 0.6s cubic-bezier(.2,.8,.2,1);
+  }
+  .track-media:hover { transform: translateY(-4px); }
+
+  .track-media img,
+  .track-media svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .track-number-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(80px, 16vw, 220px);
+    color: var(--ink);
+    mix-blend-mode: overlay;
+    opacity: 0.85;
+    pointer-events: none;
+    letter-spacing: -0.03em;
+  }
+
+  .track-body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .track-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    flex-wrap: wrap;
+  }
+
+  .track-num { color: var(--accent); font-weight: 500; }
+
+  .track-tool {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid var(--ink-faint);
+    border-radius: 2px;
+    color: var(--ink);
+    background: rgba(232, 168, 79, 0.06);
+  }
+  .track-tool::before {
+    content: "◆";
+    color: var(--accent);
+    font-size: 8px;
+  }
+
+  .track-title {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(40px, 5.5vw, 72px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  .track-desc {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink-dim);
+    max-width: 540px;
+  }
+
+  .track-art-credit {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: -4px;
+  }
+  .track-art-credit .sep { padding: 0 8px; opacity: 0.5; }
+
+  .player {
+    margin-top: 8px;
+    background: var(--bg-2);
+    border: 1px solid var(--ink-faint);
+    border-radius: 2px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 540px;
+    transition: border-color 0.3s;
+  }
+  .player.playing { border-color: var(--accent); }
+
+  .play-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .play-btn:hover {
+    background: var(--accent);
+    transform: scale(1.05);
+  }
+  .play-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+  .player-mid {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .progress {
+    height: 3px;
+    background: var(--ink-faint);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.1s linear;
+  }
+
+  .player-times {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+  }
+
+  .volume {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+  }
+  .volume svg {
+    width: 11px;
+    height: 11px;
+    fill: var(--ink-dim);
+    flex-shrink: 0;
+  }
+  .volume input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 70px;
+    height: 2px;
+    background: var(--ink-faint);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    margin: 0;
+  }
+  .volume input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.15s;
+  }
+  .volume input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+  }
+  .volume input[type="range"]::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
+
+  footer {
+    padding: 80px 32px 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+    border-top: 1px solid var(--ink-faint);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: end;
+  }
+
+  footer .big {
+    font-family: var(--display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(54px, 9vw, 140px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  footer .credits {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    text-align: right;
+    line-height: 1.9;
+  }
+  footer .credits .key { color: var(--ink-faint); margin-right: 8px; }
+  footer .credits .val { color: var(--ink); }
+
+  @media (max-width: 860px) {
+    .track {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 36px 0;
+    }
+    .track:nth-child(even) .track-media { order: 0; }
+    .track:nth-child(even) .track-body { order: 0; }
+    .hero { padding: 80px 24px 60px; }
+    .tracks { padding: 40px 24px 80px; }
+    footer {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+    footer .credits { text-align: left; }
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.9s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="tape-bar">
+  <div><span class="dot"></span>Now Streaming — Close Quarters</div>
+  <div>10 Tracks · Generative</div>
+</div>
+
+<section class="hero">
+  <div class="hero-label fade-up" style="animation-delay: 0.1s">
+  </div>
+
+  <h1 class="hero-title fade-up" style="animation-delay: 0.2s">
+    Close<br>
+    <span class="em">Quarters</span>
+  </h1>
+
+  <p class="hero-intro fade-up" style="animation-delay: 0.4s">
+     <em>Close Quarters</em> is an emotionally charged album about love at its closest distance — where desire, fear, memory, conflict, and devotion all press against each other. Blending intimate duets, dark romantic ballads, theatrical pop, and songs of escape and reinvention, it captures the feeling of being trapped in the same room with your heart, your past, and the person who can either heal you or break you. Every track feels personal, cinematic, and uncomfortably close, turning small conversations and private moments into something huge.
+  </p>
+
+  <div class="hero-meta fade-up" style="animation-delay: 0.6s">
+    <div class="cell">
+      <span class="k">Music</span>
+      <span class="v">LTX 1.5 XL<span class="sub">generated locally</span></span>
+    </div>
+    <div class="cell">
+      <span class="k">Cover Art</span>
+      <span class="v">FLUX 2.Dev</span>
+    </div>
+    <div class="cell">
+      <span class="k">Site Code</span>
+      <span class="v">Claude Opus 4.7</span>
+    </div>
+    <div class="cell">
+      <span class="k">Format</span>
+      <span class="v">Digital · 10 Tracks</span>
+    </div>
+  </div>
+</section>
+
+<section class="tracks">
+  <div class="tracks-head">
+    <h2>The Tracklist</h2>
+    <div class="count">01 → 10</div>
+  </div>
+  <div id="track-list"></div>
+</section>
+
+<footer>
+  <div class="credits">
+    <div><span class="key">Music</span><span class="val">LTX 1.5 XL (local)</span></div>
+    <div><span class="key">Cover Art</span><span class="val">FLUX 2.Dev</span></div>
+    <div><span class="key">Website</span><span class="val">Claude Opus 4.7</span></div>
+    <div><span class="key">Year</span><span class="val">2026</span></div>
+  </div>
+</footer>
+
+
+<script>
+const MUSIC_TOOL = "LTX 1.5 XL";
+const ART_TOOL   = "FLUX 2.Dev";
+const AUDIO_EXT  = ".mp3";
+const IMAGE_EXT  = ".png";
+
+const TRACKS = [
+  { title: "Hello New World",
+    desc:  "A bright, feel-good solo song about a girl stepping into a new city, a new life, and a fresh start with joy, freedom, and optimism." },
+  { title: "City Below Us",
+    desc:  "A late-night rooftop duet about two people deciding whether to leave everything behind and run toward freedom together." },
+  { title: "Excavate",
+    desc:  "A broken man stands in the wreckage of his choices and realizes too late that the one person he pushed away to protect was the only one who ever made him feel human." },
+  { title: "Headlights & Alibis",
+    desc:  "A thrilling, fast-moving duet about a couple speeding into the night together, choosing danger and each other over safety." },
+  { title: "Lines We Didn’t Draw",
+    desc:  "A heartbreaking duet about a couple trapped between families who refuse to come together, with old divisions hanging over their future." },
+  { title: "Pretty Little Problem",
+    desc:  "A flashy, theatrical pop duet where two chaotic personalities trash-talk each other for fun, flirt through the insults, and secretly love the tension." },
+  { title: "Say It Before Silence",
+    desc:  "A fragile late-night duet between two lovers confessing their fears that one day the other might cheat, drift away, or quietly stop loving them." },
+  { title: "The Art of Forgetting",
+    desc:  "Two former lovers run into each other years later and try to act normal, while secretly realizing neither of them has truly moved on." },
+  { title: "Too Close to Me",
+    desc:  "A dark, slow song about a dangerous man pulling away from love because he believes getting too close to him will only hurt the woman he wants." },
+  { title: "With You, I’m Home",
+    desc:  "An upbeat chiptune-pop duet about two people finding love, growing together, and feeling at home in each other no matter where life takes them." },
+];
+
+/* ═══════════════════════════════════════════════════════════
+   Site logic
+   ═══════════════════════════════════════════════════════════ */
+
+// Convert a display title to the file naming convention:
+//   "The Art of Forgetting"   -> "The_Art_Of_Forgetting"
+//   "Lines We Didn't Draw"    -> "Lines_We_Didnt_Draw"
+//   "With You, I'm Home"      -> "With_You_Im_Home"
+//   "Headlights & Alibis"     -> "Headlights_&_Alibis"
+function slugify(title) {
+  return title
+    .replace(/[\u2018\u2019']/g, "") // strip straight + curly apostrophes
+    .replace(/,/g, "")               // strip commas
+    .split(/\s+/)                    // split on any whitespace
+    .filter(Boolean)                 // remove empty tokens
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1)) // Title Case every word
+    .join("_");
+}
+
+const PALETTES = [
+  ["#e8a84f", "#8b3a1f", "#1a0f08"],
+  ["#d15a3a", "#3a1810", "#0c0a08"],
+  ["#8ea87a", "#2a3a24", "#0f120c"],
+  ["#c9a876", "#4a3820", "#18120a"],
+  ["#b85a4a", "#2e1210", "#0c0706"],
+  ["#6a8ea8", "#1f2a3a", "#08101c"],
+  ["#d4b888", "#5a4226", "#1a1208"],
+  ["#9c6a4a", "#3a1e12", "#0f0805"],
+  ["#7a9078", "#28332a", "#0a1008"],
+  ["#c08050", "#4a2818", "#180c06"],
+];
+
+function makeArtSVG(index) {
+  const p = PALETTES[index % PALETTES.length];
+  const variants = [
+    `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="400" fill="${p[2]}"/><circle cx="200" cy="200" r="180" fill="none" stroke="${p[1]}" stroke-width="1"/><circle cx="200" cy="200" r="140" fill="none" stroke="${p[1]}" stroke-width="1"/><circle cx="200" cy="200" r="100" fill="${p[1]}" opacity="0.4"/><circle cx="200" cy="200" r="60" fill="${p[0]}"/></svg>`,
+    `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="400" fill="${p[2]}"/><g fill="${p[0]}"><rect x="40" y="40" width="60" height="60" opacity="0.9"/><rect x="140" y="80" width="60" height="60" opacity="0.6"/><rect x="240" y="40" width="60" height="60" opacity="0.8"/><rect x="80" y="200" width="60" height="60" opacity="0.5" fill="${p[1]}"/><rect x="200" y="240" width="60" height="60" opacity="0.7"/><rect x="300" y="180" width="60" height="60" opacity="0.9" fill="${p[1]}"/></g></svg>`,
+    `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="400" fill="${p[2]}"/><g stroke="${p[0]}" fill="none" stroke-width="1.5"><path d="M0 120 Q 100 80 200 120 T 400 120"/><path d="M0 160 Q 100 120 200 160 T 400 160" opacity="0.7"/><path d="M0 200 Q 100 160 200 200 T 400 200" opacity="0.5"/><path d="M0 240 Q 100 200 200 240 T 400 240" opacity="0.35"/><path d="M0 280 Q 100 240 200 280 T 400 280" opacity="0.2" stroke="${p[1]}"/></g></svg>`,
+    `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g${index}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${p[0]}"/><stop offset="100%" stop-color="${p[1]}"/></linearGradient></defs><rect width="400" height="400" fill="${p[2]}"/><circle cx="200" cy="260" r="120" fill="url(#g${index})"/><rect x="0" y="260" width="400" height="2" fill="${p[0]}" opacity="0.5"/><rect x="0" y="280" width="400" height="1" fill="${p[0]}" opacity="0.3"/><rect x="0" y="300" width="400" height="1" fill="${p[0]}" opacity="0.2"/></svg>`,
+    `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="400" fill="${p[2]}"/><polygon points="200,60 340,340 60,340" fill="${p[1]}" opacity="0.6"/><polygon points="200,120 280,280 120,280" fill="${p[0]}"/></svg>`,
+  ];
+  return variants[index % variants.length];
+}
+
+function fmtTime(s) {
+  if (isNaN(s) || !isFinite(s)) return "--:--";
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+}
+
+const trackList = document.getElementById("track-list");
+
+TRACKS.forEach((t, i) => {
+  const num = String(i + 1).padStart(2, "0");
+  const base = slugify(t.title);
+  const audioPath = encodeURI(base + AUDIO_EXT);
+  const imagePath = encodeURI(base + IMAGE_EXT);
+
+  const el = document.createElement("article");
+  el.className = "track";
+  el.innerHTML = `
+    <div class="track-media">
+      <img src="${imagePath}" alt="${t.title} cover art" data-fallback="${i}" />
+      <div class="track-number-bg">${num}</div>
+    </div>
+    <div class="track-body">
+      <div class="track-meta-row">
+        <span class="track-num">Track ${num}</span>
+        <span class="track-tool">${MUSIC_TOOL}</span>
+      </div>
+      <h3 class="track-title">${t.title}</h3>
+      <p class="track-desc">${t.desc}</p>
+      <div class="track-art-credit">
+        Music · ${MUSIC_TOOL}<span class="sep">/</span>Cover · ${ART_TOOL}
+      </div>
+      <div class="player" data-player>
+        <button class="play-btn" aria-label="Play ${t.title}">
+          <svg viewBox="0 0 24 24" class="icon-play"><polygon points="6,4 20,12 6,20"/></svg>
+          <svg viewBox="0 0 24 24" class="icon-pause" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        </button>
+        <div class="player-mid">
+          <div class="progress"><div class="progress-fill"></div></div>
+          <div class="player-times">
+            <span class="t-cur">00:00</span>
+            <div class="volume">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+              <input type="range" class="vol" min="0" max="1" step="0.01" value="0.5" aria-label="Volume">
+            </div>
+            <span class="t-dur">--:--</span>
+          </div>
+        </div>
+        <audio preload="metadata" src="${audioPath}"></audio>
+      </div>
+    </div>
+  `;
+  trackList.appendChild(el);
+});
+
+// Graceful fallback: if a cover image isn't in the folder yet, show a procedural pattern
+document.querySelectorAll("img[data-fallback]").forEach(img => {
+  img.addEventListener("error", () => {
+    const i = parseInt(img.dataset.fallback, 10);
+    const wrap = img.parentElement;
+    img.remove();
+    wrap.insertAdjacentHTML("afterbegin", makeArtSVG(i));
+  });
+});
+
+// Audio players — only one plays at a time, shared volume across all tracks
+let sharedVolume = 0.5; // default to half
+
+const allPlayers = document.querySelectorAll("[data-player]");
+let currentlyPlaying = null;
+
+allPlayers.forEach(pl => {
+  const audio = pl.querySelector("audio");
+  const btn = pl.querySelector(".play-btn");
+  const iconPlay = pl.querySelector(".icon-play");
+  const iconPause = pl.querySelector(".icon-pause");
+  const fill = pl.querySelector(".progress-fill");
+  const progress = pl.querySelector(".progress");
+  const tCur = pl.querySelector(".t-cur");
+  const tDur = pl.querySelector(".t-dur");
+  const volSlider = pl.querySelector(".vol");
+
+  // initialize volume
+  audio.volume = sharedVolume;
+
+  volSlider.addEventListener("input", (e) => {
+    sharedVolume = parseFloat(e.target.value);
+    // apply to every track so the level stays consistent when switching songs
+    document.querySelectorAll("audio").forEach(a => a.volume = sharedVolume);
+    document.querySelectorAll(".vol").forEach(s => {
+      if (s !== e.target) s.value = sharedVolume;
+    });
+  });
+
+  audio.addEventListener("loadedmetadata", () => {
+    tDur.textContent = fmtTime(audio.duration);
+  });
+
+  btn.addEventListener("click", () => {
+    if (audio.paused) {
+      if (currentlyPlaying && currentlyPlaying !== audio) {
+        currentlyPlaying.pause();
+      }
+      audio.play().catch(() => {});
+      currentlyPlaying = audio;
+    } else {
+      audio.pause();
+    }
+  });
+
+  audio.addEventListener("play", () => {
+    pl.classList.add("playing");
+    iconPlay.style.display = "none";
+    iconPause.style.display = "block";
+  });
+  audio.addEventListener("pause", () => {
+    pl.classList.remove("playing");
+    iconPlay.style.display = "block";
+    iconPause.style.display = "none";
+  });
+  audio.addEventListener("timeupdate", () => {
+    if (audio.duration) {
+      fill.style.width = (audio.currentTime / audio.duration * 100) + "%";
+      tCur.textContent = fmtTime(audio.currentTime);
+    }
+  });
+  audio.addEventListener("ended", () => {
+    fill.style.width = "0%";
+    tCur.textContent = "00:00";
+  });
+
+  progress.addEventListener("click", (e) => {
+    const rect = progress.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    if (audio.duration) audio.currentTime = audio.duration * pct;
+  });
+});
+</script>
+
+</body>
+</html>
